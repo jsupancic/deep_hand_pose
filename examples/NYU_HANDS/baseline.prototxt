@@ -1,0 +1,62 @@
+name: "HandPose"
+layer {
+  name: "ImageGeneration"
+  type: "Render"
+  top: "data"
+  top: "label"
+  top: "index"
+  top: "gt_hm"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "NYU_HANDS_TRAIN"
+    batch_size: 1
+  }
+}
+layer {
+  name: "ImageGeneration"
+  type: "Render"
+  top: "data"
+  top: "label"
+  top: "index"
+  top: "gt_hm"
+include {
+    phase: TEST
+  }
+  data_param {
+    source: "NYU_HANDS_TEST"
+    batch_size: 1
+  }
+}
+
+#
+layer {
+      name: "tompson"
+      type: "Tompson"
+      bottom: "data"
+      bottom: "index"
+      top: "predictions"
+}
+
+# tops
+
+layer {
+  name: "loss"
+  type: "EuclideanLoss"
+  bottom: "predictions"
+  bottom: "label"
+  top: "loss"
+}
+
+layer {
+  name: "Viz"
+  type: "MVRegressionLoss"
+  bottom: "data"
+  bottom: "label"
+  bottom: "predictions"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}

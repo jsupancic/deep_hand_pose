@@ -1,0 +1,593 @@
+name: "HandPoseHM"
+layer {
+  name: "DataSrc"
+  type: "Render"
+  top: "data"
+  top: "label"
+  top: "index"
+  top: "heatmap"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "NYU_HANDS_TRAIN"
+    batch_size: 64
+  }
+}
+layer {
+  name: "DataSrc"
+  type: "Render"
+  top: "data"
+  top: "label"
+  top: "index"
+  top: "heatmap"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "NYU_HANDS_TEST"
+    batch_size: 64
+  }
+}
+
+### Convolutional Stage
+
+### Conv1
+
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  convolution_param {
+    num_output: 8
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+#      value: 50
+    }
+  }
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "bn1"
+  type: "BN"
+  bottom: "pool1"
+  top: "bn1"
+  bn_param {
+    scale_filler {
+    type: "constant"
+    value: 1
+  }
+  shift_filler {
+    type: "constant"
+    value: 0.001
+  }
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+}
+layer {
+  name: "reluA"
+  type: "ReLU"
+  bottom: "bn1"
+  top: "bn1"
+  relu_param
+  {
+    negative_slope: 0.05
+  }  
+}
+# layer {
+#    name: "debug1_pool1"
+#    type: "DebugStatistics"
+#    top: "pool1"
+#    bottom: "pool1"
+#   include {
+#     phase: TEST
+#   }   
+#    }
+
+### Conv2
+
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "bn1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  convolution_param {
+    num_output: 8
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "bn2"
+  type: "BN"
+  bottom: "pool2"
+  top: "bn2"
+  bn_param {
+    scale_filler {
+    type: "constant"
+    value: 1
+  }
+  shift_filler {
+    type: "constant"
+    value: 0.001
+  }
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+}
+layer {
+  name: "reluB"
+  type: "ReLU"
+  bottom: "bn2"
+  top: "bn2"
+  relu_param
+  {
+    negative_slope: 0.05
+  }  
+}
+# layer {
+#    name: "debug_pool2"
+#    type: "DebugStatistics"
+#    top: "pool2"
+#    bottom: "pool2"
+#   include {
+#     phase: TEST
+#   }   
+#    }
+
+### Conv3
+
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "bn2"
+  top: "conv3"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  convolution_param {
+    num_output: 8
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+# layer {
+#   name: "pool2"
+#   type: "Pooling"
+#   bottom: "conv2"
+#   top: "pool2"
+#   pooling_param {
+#     pool: MAX
+#     kernel_size: 2
+#     stride: 2
+#   }
+# }
+layer {
+  name: "bn3"
+  type: "BN"
+  bottom: "conv3"
+  top: "bn3"
+  bn_param {
+    scale_filler {
+    type: "constant"
+    value: 1
+  }
+  shift_filler {
+    type: "constant"
+    value: 0.001
+  }
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+}
+layer {
+  name: "reluC"
+  type: "ReLU"
+  bottom: "bn3"
+  top: "bn3"
+  relu_param
+  {
+    negative_slope: 0.05
+  }  
+}
+# layer {
+#    name: "debug_3"
+#    type: "DebugStatistics"
+#    top: "bn3"
+#    bottom: "bn3"
+#   include {
+#     phase: TEST
+#   }   
+#    }
+
+
+### Fully Connected Stage
+
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "bn3"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  inner_product_param {
+    num_output: 1024
+    weight_filler {
+      #type: "xavier"
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "bn4"
+  type: "BN"
+  bottom: "ip1"
+  top: "bn4"
+  bn_param {
+    scale_filler {
+    type: "constant"
+    value: 1
+  }
+  shift_filler {
+    type: "constant"
+    value: 0.001
+  }
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "bn4"
+  top: "bn4"
+    relu_param
+  {
+  #negative_slope: 0.05
+  }
+}
+# layer {
+#    name: "debug_ip1"
+#    type: "DebugStatistics"
+#    top: "bn4"
+#    bottom: "bn4"
+#      include {
+#     phase: TEST
+#   }
+#    }
+layer {
+  name: "ip2"
+  type: "InnerProduct"
+  bottom: "bn4"
+  top: "pred_hm"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  inner_product_param {
+    num_output: 1024
+    weight_filler {
+      #type: "xavier"
+      type: "gaussian"
+      std: 0.05
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "bn5"
+  type: "BN"
+  bottom: "pred_hm"
+  top: "bn5"
+  bn_param {
+    scale_filler {
+    type: "constant"
+    value: 1
+  }
+  shift_filler {
+    type: "constant"
+    value: 0.001
+  }
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 1.00001
+    decay_mult: 0
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "bn5"
+  top: "bn5"
+    relu_param
+  {
+  #negative_slope: 0.05
+  }
+}
+# layer {
+#    name: "debug_ip2"
+#    type: "DebugStatistics"
+#    top: "bn5"
+#    bottom: "bn5"
+#      include {
+#     phase: TEST
+#   }
+#    }
+
+#############################################
+##### argmaxing
+
+# layer {
+#       name: "reshape_hm"
+#       type: "CopyShape"
+#       bottom: "bn5"
+#       bottom: "heatmap"
+#       top: "pred_hm_struc"
+# }
+
+# layer {
+#       name: "find_top_hm_coords"
+#       type: "ArgMax2D"
+#       bottom: "pred_hm_struc"
+#       top: "top_hm_coords"
+# }
+# layer {
+#   name: "keypoint_few_inputs"
+#   type: "Convolution"
+#   bottom: "top_hm_coords"
+#   top: "keypoint_predictions"
+#     convolution_param {
+#     num_output: 28     # learn 96 filters
+#     kernel_w: 3    # each filter is 11x11
+#     kernel_h: 1
+#     stride: 3          # step 4 pixels between each filter application
+#     group: 1 # 14 doesn't allow information sharing between argmaxes
+#     weight_filler {
+#       type: "gaussian" # initialize the filters from a Gaussian
+#       std: 0.05        # distribution with stdev 0.01 (default mean: 0)
+#     }
+#     bias_filler {
+#       type: "constant" # initialize the biases to zero (0)
+#       value: .5
+#     }
+#   }
+# }
+
+#############################################
+## Bottleneck
+
+layer {
+  name: "bottleneck"
+  type: "InnerProduct"
+  #bottom: "top_hm_coords"
+  bottom: "bn5"
+  top: "bottleneck"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  inner_product_param {
+    num_output: 22
+    weight_filler {
+      #type: "xavier"
+      type: "gaussian"
+      std: 0.02
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+# layer {
+#   name: "bottleneck_rect"
+#   type: "ReLU"
+#   bottom: "bottleneck"
+#   top: "bottleneck"
+#     relu_param
+#   {
+#   negative_slope: 0.05
+#   }
+# }
+# layer {
+#    name: "debug_bottleneck"
+#    type: "DebugStatistics"
+#    top: "bottleneck"
+#    bottom: "bottleneck"
+#      include {
+#     phase: TEST
+#   }
+# }
+
+#############################################
+#### Top level keypoint prediction
+
+layer {
+ name: "keypoint"
+ type: "PCA"
+ bottom: "bottleneck"
+ #bottom: "top_hm_coords"
+ #bottom: "bn5"
+ #bottom: "bn5"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+ top: "keypoint_predictions"
+  inner_product_param {
+    num_output: 28
+    weight_filler {
+      #type: "xavier"
+      type: "gaussian"
+      std: 0.05
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.5
+    }
+  } 
+}
+# layer {
+#    name: "debug_keypoint_pred"
+#    type: "DebugStatistics"
+#    top: "keypoint_predictions"
+#    bottom: "keypoint_predictions"
+#      include {
+#     phase: TEST
+#   }
+#    }
+
+#############################################
+## Normalize
+#layer {
+#      name: "unnorm"
+#      type: "UnNormalization"
+#      bottom: "normal_keypoint_predictions"
+#      bottom: "label"
+#      top: "keypoint_predictions"
+#}
+
+#############################################
+## Top level nodes
+
+# layer {
+#       name: "hm2kp"
+#       type: "HeatMap2Keypoint"
+#       bottom: "bn5"
+#       #bottom: "heatmap"
+#       top: "argmaxes"
+
+#       include {
+#       	      phase: TEST
+# 	      }
+# }
+
+layer {
+      name: "ignore"
+      type: "Silence"
+      bottom: "index"
+      bottom: "heatmap"
+      #bottom: "top_hm_coords"
+}
+
+layer {
+  name: "loss"
+  #type: "SigmoidCrossEntropyLoss"
+  type: "EuclideanLoss"
+  bottom: "label"
+  bottom: "keypoint_predictions"
+  #bottom: "bn5"
+  #bottom: "heatmap_flat"
+  top: "loss"
+  loss_weight: 1
+}
+
+layer {
+  name: "Viz"
+  type: "MVRegressionLoss"
+  bottom: "data"
+  bottom: "label"
+  bottom: "keypoint_predictions"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
