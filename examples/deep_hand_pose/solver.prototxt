@@ -1,11 +1,11 @@
 # The train/test net protocol buffer definition
-#net: "examples/NYU_HANDS/regressor.prototxt"
-#net: "examples/NYU_HANDS/heatmap.prototxt"
-#net: "examples/NYU_HANDS/oxford_hm.prototxt"
-#net: "examples/NYU_HANDS/tompson.prototxt"
-#net: "examples/NYU_HANDS/oberweger.prototxt"
-net: "examples/NYU_HANDS/oberweger-pca.prototxt"
-#net: "examples/NYU_HANDS/baseline.prototxt"
+#net: "examples/deep_hand_pose/regressor.prototxt"
+#net: "examples/deep_hand_pose/heatmap.prototxt"
+#net: "examples/deep_hand_pose/oxford_hm.prototxt"
+#net: "examples/deep_hand_pose/tompson.prototxt"
+#net: "examples/deep_hand_pose/oberweger.prototxt"
+net: "examples/deep_hand_pose/oberweger-pca.prototxt"
+#net: "examples/deep_hand_pose/baseline.prototxt"
 # test_iter specifies how many forward passes the test should carry out.
 # In the case of MNIST, we have test batch size 100 and 100 test iterations,
 # covering the full 10,000 testing images.
@@ -29,7 +29,7 @@ display: 25
 average_loss: 25
 # The maximum number of iterations
 max_iter: 40000
-max_seconds: 21600
+# max_seconds: 21600
 # snapshot intermediate results
 snapshot: 5000
 snapshot_prefix: "out/network"

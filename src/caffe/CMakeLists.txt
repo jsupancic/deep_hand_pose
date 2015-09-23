@@ -12,13 +12,21 @@ caffe_default_properties(proto)
 # creates 'test_srcs', 'srcs', 'test_cuda', 'cuda' lists
 caffe_pickup_caffe_sources(${PROJECT_SOURCE_DIR})
 
+# Use C++11 for some things...
+set(MY_CXX_FLAGS "  -std=c++11 ")
+set_source_files_properties(layers/hand_data_layer.cpp PROPERTIES COMPILE_FLAGS ${MY_CXX_FLAGS})
+set_source_files_properties(layers/mv_regression_loss.cpp PROPERTIES COMPILE_FLAGS ${MY_CXX_FLAGS})
+set_source_files_properties(jvl.cpp PROPERTIES COMPILE_FLAGS ${MY_CXX_FLAGS})
+set_source_files_properties(ThreadPool.cpp PROPERTIES COMPILE_FLAGS ${MY_CXX_FLAGS})
+
 if(HAVE_CUDA)
   caffe_cuda_compile(cuda_objs ${cuda})
   list(APPEND srcs ${cuda_objs} ${cuda})
 endif()
 
+FIND_PACKAGE( Boost COMPONENTS REQUIRED system filesystem thread regex)
 add_library(caffe ${srcs})
-target_link_libraries(caffe proto ${Caffe_LINKER_LIBS})
+target_link_libraries(caffe proto ${Caffe_LINKER_LIBS} ${Boost_LIBRARIES})
 caffe_default_properties(caffe)
 
 # ---[ Tests
