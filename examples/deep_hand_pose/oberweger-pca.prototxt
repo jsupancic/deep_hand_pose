@@ -1,7 +1,7 @@
 name: "HandPoseHM"
 layer {
   name: "DataSrc"
-  type: "Render"
+  type: "HandData"
   top: "data"
   top: "label"
   top: "index"
@@ -16,7 +16,7 @@ layer {
 }
 layer {
   name: "DataSrc"
-  type: "Render"
+  type: "HandData"
   top: "data"
   top: "label"
   top: "index"
@@ -79,15 +79,6 @@ layer {
     negative_slope: 0.05
   }  
 }
-layer {
-   name: "debug1_pool1"
-   type: "DebugStatistics"
-   top: "pool1"
-   bottom: "pool1"
-  include {
-    phase: TEST
-  }   
-   }
 
 ### Conv2
 
@@ -135,15 +126,6 @@ layer {
     negative_slope: 0.05
   }  
 }
-layer {
-   name: "debug_pool2"
-   type: "DebugStatistics"
-   top: "pool2"
-   bottom: "pool2"
-  include {
-    phase: TEST
-  }   
-   }
 
 ### Conv3
 
@@ -191,15 +173,6 @@ layer {
     negative_slope: 0.05
   }  
 }
-layer {
-   name: "debug_3"
-   type: "DebugStatistics"
-   top: "conv3"
-   bottom: "conv3"
-  include {
-    phase: TEST
-  }   
-   }
 
 
 ### Fully Connected Stage
@@ -237,15 +210,7 @@ layer {
   #negative_slope: 0.05
   }
 }
-layer {
-   name: "debug_ip1"
-   type: "DebugStatistics"
-   top: "ip1"
-   bottom: "ip1"
-     include {
-    phase: TEST
-  }
-   }
+
 layer {
   name: "ip2"
   type: "InnerProduct"
@@ -279,54 +244,6 @@ layer {
   #negative_slope: 0.05
   }
 }
-layer {
-   name: "debug_ip2"
-   type: "DebugStatistics"
-   top: "pred_hm"
-   bottom: "pred_hm"
-     include {
-    phase: TEST
-  }
-   }
-
-#############################################
-##### argmaxing
-
-# layer {
-#       name: "reshape_hm"
-#       type: "CopyShape"
-#       bottom: "pred_hm"
-#       bottom: "heatmap"
-#       top: "pred_hm_struc"
-# }
-
-# layer {
-#       name: "find_top_hm_coords"
-#       type: "ArgMax2D"
-#       bottom: "pred_hm_struc"
-#       top: "top_hm_coords"
-# }
-# layer {
-#   name: "keypoint_few_inputs"
-#   type: "Convolution"
-#   bottom: "top_hm_coords"
-#   top: "keypoint_predictions"
-#     convolution_param {
-#     num_output: 28     # learn 96 filters
-#     kernel_w: 3    # each filter is 11x11
-#     kernel_h: 1
-#     stride: 3          # step 4 pixels between each filter application
-#     group: 1 # 14 doesn't allow information sharing between argmaxes
-#     weight_filler {
-#       type: "gaussian" # initialize the filters from a Gaussian
-#       std: 0.05        # distribution with stdev 0.01 (default mean: 0)
-#     }
-#     bias_filler {
-#       type: "constant" # initialize the biases to zero (0)
-#       value: .5
-#     }
-#   }
-# }
 
 #############################################
 ## Bottleneck
@@ -353,25 +270,6 @@ layer {
     bias_filler {
       type: "constant"
     }
-  }
-}
-# layer {
-#   name: "bottleneck_rect"
-#   type: "ReLU"
-#   bottom: "bottleneck"
-#   top: "bottleneck"
-#     relu_param
-#   {
-#   negative_slope: 0.05
-#   }
-# }
-layer {
-   name: "debug_bottleneck"
-   type: "DebugStatistics"
-   top: "bottleneck"
-   bottom: "bottleneck"
-     include {
-    phase: TEST
   }
 }
 
@@ -405,15 +303,6 @@ layer {
     }
   } 
 }
-layer {
-   name: "debug_keypoint_pred"
-   type: "DebugStatistics"
-   top: "keypoint_predictions"
-   bottom: "keypoint_predictions"
-     include {
-    phase: TEST
-  }
-   }
 
 #############################################
 ## Normalize

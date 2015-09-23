@@ -21,9 +21,9 @@ namespace caffe
   {
     InnerProductLayer<Dtype>::LayerSetUp(bottom,top);
 
-    Mat eigenvectors; readFileToMat(eigenvectors,"examples/NYU_HANDS/pca_eigenvectors.dat");
-    Mat eigenvalues; readFileToMat(eigenvalues,"examples/NYU_HANDS/pca_eigenvalues.dat");
-    Mat mean; readFileToMat(mean,"examples/NYU_HANDS/pca_mean.dat");
+    Mat eigenvectors; readFileToMat(eigenvectors,"examples/deep_hand_pose/pca_eigenvectors.dat");
+    Mat eigenvalues; readFileToMat(eigenvalues,"examples/deep_hand_pose/pca_eigenvalues.dat");
+    Mat mean; readFileToMat(mean,"examples/deep_hand_pose/pca_mean.dat");
 
     //
     assert(this->blobs_.size() == 2);
