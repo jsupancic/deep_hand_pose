@@ -17,21 +17,21 @@ The license is the same as caffe from which this is derived. Please see below.
 
 If you find this useful, relevant citations would be
 
-@article{supancic2015depth,
-  title={Depth-based hand pose estimation: methods, data, and challenges},
-  author={Supancic III, James Steven and Rogez, Gregory and Yang, Yi and Shotton, Jamie and Ramanan, Deva},
-  journal={arXiv preprint arXiv:1504.06378},
-  year={2015}
-}
+    @article{supancic2015depth,
+      title={Depth-based hand pose estimation: methods, data, and challenges},
+      author={Supancic III, James Steven and Rogez, Gregory and Yang, Yi and Shotton, Jamie and Ramanan, Deva},
+      journal={arXiv preprint arXiv:1504.06378},
+      year={2015}
+    }
 
 and
 
-@article{oberweger2015hands,
-  title={Hands Deep in Deep Learning for Hand Pose Estimation},
-  author={Oberweger, Markus and Wohlhart, Paul and Lepetit, Vincent},
-  journal={arXiv preprint arXiv:1502.06807},
-  year={2015}
-}
+    @article{oberweger2015hands,
+      title={Hands Deep in Deep Learning for Hand Pose Estimation},
+      author={Oberweger, Markus and Wohlhart, Paul and Lepetit, Vincent},
+      journal={arXiv preprint arXiv:1502.06807},
+      year={2015}
+    }
 
 # Caffe
 
