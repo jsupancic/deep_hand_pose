@@ -18,13 +18,60 @@ using namespace jvl;
 
 namespace caffe
 {
+  // caffe blobs use cuda so they cannot be passed between threads...
+  template<typename Dtype>
+  class CpuBlob
+  {
+  private:
+    int n, c, h, w;
+    vector<Dtype> data;
+    
+  public:
+    CpuBlob();
+    CpuBlob(const int num, const int channels, const int height,
+	    const int width) : n(num), c(channels), h(height), w(width)
+    {
+      data.resize(n*c*w*h);
+    }
+    std::shared_ptr<Blob<Dtype> > toCaffeBlob()
+    {
+      std::shared_ptr<Blob<Dtype> > b = std::make_shared<Blob<Dtype> >(n,c,h,w);
+      caffe_copy(n*c*w*h, &data[0], b->mutable_cpu_data());
+      return b;
+    }
+    size_t num() const
+    {
+      return n;
+    }
+    size_t channels() const
+    {
+      return c;
+    }
+    size_t width() const
+    {
+      return w;
+    }
+    size_t height() const
+    {
+      return h;
+    }
+    Dtype* mutable_cpu_data()
+    {
+      return &data[0];
+    }
+    size_t offset(const int n, const int c = 0, const int h = 0,
+		      const int w = 0) const {
+      return ((n * channels() + c) * height() + h) * width() + w;
+    }    
+  };
+  
   template<typename Dtype>
   struct TrainingHandData
   {
-    std::shared_ptr<Blob<Dtype> > data;
-    std::shared_ptr<Blob<Dtype> > label;
-    std::shared_ptr<Blob<Dtype> > index;
-    std::shared_ptr<Blob<Dtype> > heatmap;
+    std::shared_ptr<CpuBlob<Dtype> > data;
+    std::shared_ptr<CpuBlob<Dtype> > label;
+    std::shared_ptr<CpuBlob<Dtype> > index;
+    std::shared_ptr<CpuBlob<Dtype> > heatmap;
   };
   
   template<typename Dtype>
@@ -244,16 +291,16 @@ namespace caffe
     private_->output_queue.pop(cur_render);
 
     if(top.size() > 0)
-    top.at(0)->CopyFrom(*cur_render.data);
+      top.at(0)->CopyFrom(*cur_render.data->toCaffeBlob());
     if(top.size() > 1)
     {
       // has the label been corrupted here?
-      top.at(1)->CopyFrom(*cur_render.label);
+      top.at(1)->CopyFrom(*cur_render.label->toCaffeBlob());
     }
     if(top.size() > 2)
-      top.at(2)->CopyFrom(*cur_render.index);
+      top.at(2)->CopyFrom(*cur_render.index->toCaffeBlob());
     if(top.size() > 3)
-      top.at(3)->CopyFrom(*cur_render.heatmap);
+      top.at(3)->CopyFrom(*cur_render.heatmap->toCaffeBlob());
   }
 
   template <typename Dtype>
@@ -341,10 +388,10 @@ namespace caffe
   {
     TrainingHandData<Dtype> render;
     int hmChans = jvl::active_keypoints.size();
-    render.data = std::make_shared<Blob<Dtype> >(batch_size, 1, image_res, image_res);
-    render.label = std::make_shared<Blob<Dtype> >(batch_size,2*hmChans,1,1);
-    render.index = std::make_shared<Blob<Dtype> >(batch_size,1,1,1);
-    render.heatmap = std::make_shared<Blob<Dtype> >(batch_size,hmChans,jvl::heat_map_res,jvl::heat_map_res);
+    render.data = std::make_shared<CpuBlob<Dtype> >(batch_size, 1, image_res, image_res);
+    render.label = std::make_shared<CpuBlob<Dtype> >(batch_size,2*hmChans,1,1);
+    render.index = std::make_shared<CpuBlob<Dtype> >(batch_size,1,1,1);
+    render.heatmap = std::make_shared<CpuBlob<Dtype> >(batch_size,hmChans,jvl::heat_map_res,jvl::heat_map_res);
 
     for(int nIter = 0; nIter < batch_size; ++nIter)
     {
@@ -386,8 +433,9 @@ namespace caffe
       
       // write the label
       //accum_uvd(ex.uvd);
-      //do_PCA();
-      jvl::copy(ex.uvd,render.label.get(),nIter,1,1);
+      //do_PCA();      
+      Dtype*label_data = render.label->mutable_cpu_data() +  render.label->offset(nIter);
+      jvl::copy(ex.uvd,label_data,nIter,1,1);
       
       // write index
       render.index->mutable_cpu_data()[nIter] = ex.index;

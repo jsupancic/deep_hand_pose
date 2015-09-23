@@ -17,11 +17,10 @@ namespace jvl
   }
   
   template<typename Dtype>
-  void copy(const std::vector<cv::Vec3d>&uvd,caffe::Blob<Dtype> * label_blob,int nIter,double sx,double sy)
-  {
-    Dtype* label_data = label_blob->mutable_cpu_data() +  label_blob->offset(nIter);
+  void copy(const std::vector<cv::Vec3d>&uvd,Dtype* label_data,int nIter,double sx,double sy)
+  {    
     //cout << "copying to label_blob count = " << label_blob->count() << endl;
-    assert(label_blob->count() == label_blob->num()*active_keypoints.size()*2);
+    //assert(label_blob->count() == label_blob->num()*active_keypoints.size()*2);
     std::vector<Dtype> labels(active_keypoints.size()*2);
     for(int uOv = 0; uOv < 2; ++uOv)
       for(int kpIter = 0; kpIter < active_keypoints.size(); ++kpIter)
