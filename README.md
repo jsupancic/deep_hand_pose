@@ -11,6 +11,28 @@ I've added 3 new layers to caffe, in the src/caffe/layers directory
 - PCA which implements Oberweger's PCA bottleneck initialization
 - MVRegLoss which adds visualization to the euclidean loss
 
+# Deep Hand Base License and Citation
+
+The license is the same as caffe from which this is derived. Please see below. 
+
+If you find this useful, relevant citations would be
+
+@article{supancic2015depth,
+  title={Depth-based hand pose estimation: methods, data, and challenges},
+  author={Supancic III, James Steven and Rogez, Gregory and Yang, Yi and Shotton, Jamie and Ramanan, Deva},
+  journal={arXiv preprint arXiv:1504.06378},
+  year={2015}
+}
+
+and
+
+@article{oberweger2015hands,
+  title={Hands Deep in Deep Learning for Hand Pose Estimation},
+  author={Oberweger, Markus and Wohlhart, Paul and Lepetit, Vincent},
+  journal={arXiv preprint arXiv:1502.06807},
+  year={2015}
+}
+
 # Caffe
 
 Caffe is a deep learning framework made with expression, speed, and modularity in mind.
@@ -32,7 +54,7 @@ Framework development discussions and thorough bug reports are collected on [Iss
 
 Happy brewing!
 
-## License and Citation
+## Caffe License and Citation
 
 Caffe is released under the [BSD 2-Clause license](https://github.com/BVLC/caffe/blob/master/LICENSE).
 The BVLC reference models are released for unrestricted use.
