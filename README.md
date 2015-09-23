@@ -1,3 +1,16 @@
+# Deep Hand Pose
+
+examples/deep_hand_pose/train.sh should run my implementation of [1] on the NYU dataset. It can be configured to
+ use a variety of datasets. 
+
+[1] M. Oberweger, P. Wohlhart, and V. Lepetit. Hands Deep in
+Deep Learning for Hand Pose Estimation. CVWW, 2015.
+
+I've added 3 new layers to caffe, in the src/caffe/layers directory
+- HandData which loads a variety of hand image/annotation formats
+- PCA which implements Oberweger's PCA bottleneck initialization
+- MVRegLoss which adds visualization to the euclidean loss
+
 # Caffe
 
 Caffe is a deep learning framework made with expression, speed, and modularity in mind.
