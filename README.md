@@ -15,18 +15,25 @@ I've added 3 new layers to caffe, in the src/caffe/layers directory
 
 - Download the NYU HANDS dataset (http://horatio.cs.nyu.edu/mit/tompson/nyu_hand_dataset_v2.zip) into /mnt/data/NYU-Hands-v2/
 - I've converted the annotations from .mat to .csv for you:
-	cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/test/
-	cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/train/
+
+  cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/test/
+  cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/train/
+
 - Compile caffe and deep_hand_pose
-	mkdir build
-	pushd build
-	cmake ..
-	make -j16
-	popd
+
+  mkdir build
+  pushd build
+  cmake ..
+  make -j16
+  popd
+  
 - create the directory where results will be stored
-  	mkdir out
+
+  mkdir out
+
 - now run the pre-trained model on the NYU dataset! 
-	examples/deep_hand_pose/train.sh
+
+  examples/deep_hand_pose/train.sh
 
 # Deep Hand Base License and Citation
 
