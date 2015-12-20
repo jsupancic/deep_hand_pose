@@ -14,7 +14,13 @@ I've added 3 new layers to caffe, in the src/caffe/layers directory
 # step-by-step instructions
 
 - Download the NYU HANDS dataset (http://horatio.cs.nyu.edu/mit/tompson/nyu_hand_dataset_v2.zip) into /mnt/data/NYU-Hands-v2/
+- Download the deep_hand_pose code
+
+> git clone git@github.com:jsupancic/deep_hand_pose.git ~/deep_hand_pose
+
 - I've converted the annotations from .mat to .csv for you:
+
+> cd ~/deep_hand_pose/
 
 > cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/test/ 
 
@@ -22,6 +28,7 @@ I've added 3 new layers to caffe, in the src/caffe/layers directory
 
 - Compile caffe and deep_hand_pose
 
+> cd ~/deep_hand_pose/ &&
 > mkdir build &&
 > pushd build &&
 > cmake ..  &&
