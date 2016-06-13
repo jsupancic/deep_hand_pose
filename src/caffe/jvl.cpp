@@ -453,7 +453,8 @@ namespace jvl
   
   static string nyu_base()
   {
-    return "/home/jsupanci/workspace/data/NYU-Hands-v2/";
+    return "/mnt/data/NYU-Hands-v2/";
+    //return "/home/jsupanci/workspace/data/NYU-Hands-v2/";
   }
   
   struct NYU_Labels
