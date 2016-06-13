@@ -608,7 +608,7 @@ namespace jvl
   RegExample load_nyu_datum(int idx,const string&dir,const Mat&us,const Mat&vs,const Mat&ds,bool predictions = false)
   {
     // Stage #1 : get the data    
-    Mat Z = load_depth(dir,idx);
+    Mat Z = load_depth(dir,idx+1);
     //cv::imwrite(printfpp("out/Zraw%d.png",idx),eq(Z));
 
     vector<Vec3d> uvds;
