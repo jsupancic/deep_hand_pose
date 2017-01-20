@@ -22,9 +22,9 @@ I've added 3 new layers to caffe, in the src/caffe/layers directory
 
 > cd ~/deep_hand_pose/
 
-> cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/test/ 
+> cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/test/
 
-> cp nyu_csv_annotations/test/*.csv /mnt/data/NYU-Hands-v2/train/
+> cp nyu_csv_annotations/train/*.csv /mnt/data/NYU-Hands-v2/train/
 
 - Compile caffe and deep_hand_pose
 
